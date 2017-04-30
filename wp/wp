@@ -1,0 +1,51 @@
+#!/bin/bash
+
+#IMPORTANT: To use create a file to store data about the wallpapers, then
+#	update WPFILE to that file
+WPFILE=~/bin/wallpaper
+
+#Usage:
+#Display filename of current wallpaper: wp
+#Shuffle wallpaper: wp <tagname>
+#Add tagged directory: wp add <tagname> <directory>
+#List all tags: wp list
+#Update current wallpaper (put this in your i3 config): wp update
+
+
+#get variables by running wallpaper, if it exists
+if [ -f $WPFILE ]; then
+	source $WPFILE
+fi
+
+if [ -z ${update+x} ]; then
+	echo "update=\"/home/Pictures/\"" >> ~/bin/wallpaper
+fi
+
+#if no arguments passed, output current wallpaper name
+if [ "$#" == 0 ]; then
+	echo $update
+#add the passed argument to the list
+#format wp add <name> <directory>
+elif [ "$1" == "add" ]; then
+	newentry=$2=\"$PWD/$3/\"
+	if grep -q $2'=' "$WPFILE"; then
+		echo ${!3}
+		sed -i -- 's#'$2'=\".*\"#'$newentry'#g' $WPFILE
+	else
+	echo $newentry/ >> $WPFILE
+	fi	
+	echo $newentry
+elif [ "$1" == "update" ]; then
+	feh --bg-max ${!1}
+elif [ "$1" == "list" ]; then
+	cat $WPFILE
+elif [[ -v ${1} ]]; then #shuffle waifu
+
+	PIC=$(ls ${!1} | sed '/'$1{!1}'/d' | shuf -n1)
+	feh --bg-max "${!1}$PIC"
+	sed -i -- 's#update=\".*\"#update=\"'${!1}''"$PIC"'\"#g' $WPFILE
+else #base case is switch wallpaper to passed file
+	echo base
+	feh --bg-max "$PWD/$1"
+fi
+
