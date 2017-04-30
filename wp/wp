@@ -18,8 +18,9 @@ if [ -f $WPFILE ]; then
 fi
 
 #if update not defined, add it to the wpfile
-if [ -z "$update" ] ; then
+if [ -z ${update+x} ] ; then
 	echo "update=\"\"" >> $WPFILE
+	update=""
 fi
 
 #if no arguments passed, output current wallpaper name
