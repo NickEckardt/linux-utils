@@ -1,0 +1,5 @@
+All this script requires is feh. 
+
+On ubuntu, run: 
+sudo apt install feh
+
