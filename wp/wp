@@ -38,7 +38,7 @@ elif [ "$1" == "add" ]; then
 	fi	
 	echo $newentry
 elif [ "$1" == "update" ]; then
-	feh --bg-max ${!1}
+	feh --bg-max "${!1}"
 elif [ "$1" == "list" ]; then
 	cat $WPFILE
 elif [[ -v ${1} ]]; then #shuffle waifu
