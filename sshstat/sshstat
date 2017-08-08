@@ -1,0 +1,21 @@
+#!/bin/bash
+
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	echo -n "$line: "
+	ssh -f $line ':' &
+	sshpid=$!
+	#echo $sshpid
+	sleep 1
+	if ps -e | grep $sshpid > /dev/null ; then
+		echo -e '\033[1;31m''down'
+		echo -en '\e[m'
+		kill $sshpid 
+	else
+		echo -e '\033[1;32m''up'
+		echo -en '\e[m'
+		echo -n 'Loadavg: '
+		ssh -f $line 'cat /proc/loadavg'
+		sleep 1
+	fi
+done < hosts
+echo done
