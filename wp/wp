@@ -48,6 +48,8 @@ elif [[ -v ${1} ]]; then #shuffle waifu
 	sed -i -- 's#update=\".*\"#update=\"'${!1}''"$PIC"'\"#g' $WPFILE
 else #base case is switch wallpaper to passed file
 	echo base
-	feh --bg-max "$PWD/$1"
+	PIC="$PWD/$1"
+	feh --bg-max "${!1}$PIC"
+	sed -i -- 's#update=\".*\"#update=\"'${!1}''"$PIC"'\"#g' $WPFILE
 fi
 
